@@ -74,22 +74,25 @@ where film_id = 1;
 select * from customer
 where Active = 1;
  # Create a table backup table as suggested
-create table deleted_users(
-	customer_id int(11) UNIQUE NOT NULL,
-    store_id int not null,
-    first_name varchar(20),
-    last_name varchar(20),
-    email varchar(320),
-    address_id int not null,
-    active BINARY ,
-    create_date DATE,
-    last_update DATE,
-  CONSTRAINT PRIMARY KEY (customer_id)
-  #CONSTRAINT FOREIGN KEY (store_id) REFERENCES store(store_id),
-  #CONSTRAINT FOREIGN KEY (address_id) REFERENCES address(address_id)
-);
+ 
+DROP TABLE deleted_users;
 
+CREATE TABLE deleted_users
+AS SELECT
+  *
+FROM customer
+WHERE Active = 0;
 
-# customer_id, store_id, first_name, last_name, email, address_id, active, create_date, last_update
-#1, 1, MARY, SMITH, MARY.SMITH@sakilacustomer.org, 5, 1, 2006-02-14 22:04:36, 2006-02-15 04:57:20
+select * from deleted_users
+where Active = 0;
 
+SET FOREIGN_KEY_CHECKS=0; # disable restriction of key delete
+#SET FOREIGN_KEY_CHECKS=1; 
+
+DELETE FROM customer
+WHERE Active = 0;
+
+SELECT
+  *
+FROM customer
+WHERE Active = 1;
